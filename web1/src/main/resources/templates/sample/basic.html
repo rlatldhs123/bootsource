@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,5 +7,141 @@
   </head>
   <body>
     <h1>BASIC</h1>
+
+    <h4>bno : <span th:text="${param.bno}"></span></h4>
+    <h4>bno : <span th:text="${bno}"></span></h4>
+    <div>name : <span th:text="${name}"></span></div>
+    <div>name : <span th:utext="${'<h3>'+dto.first+'</h3>'}"></span></div>
+    <div>name : <span th:text="${'<h3>'+dto.first+'</h3>'}"></span></div>
+
+    <ul>
+      <li>id: <span th:text="${dto.id}"></span></li>
+      <li>first: <span th:text="${dto.first}"></span></li>
+      <li>last: <span th:text="${dto.last}"></span></li>
+      <li>regtime: <span th:text="${dto.regTime}"></span></li>
+    </ul>
+
+    <h4>SampleDto list</h4>
+
+    <ul>
+      <li th:each="dto : ${list}">[[${dto}]]</li>
+    </ul>
+
+    <h4>SampleDto list2</h4>
+
+    <ul>
+      <li th:each="dto : ${list}" th:text="${dto}"></li>
+    </ul>
+
+    <h4>Sample List4</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>index</th>
+          <th>count</th>
+          <th>size</th>
+          <th>odd/even</th>
+          <th>id</th>
+          <th>first</th>
+          <th>last</th>
+          <th>regtime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 
+      index : 번호 0부터 시작
+      count : 번호 1부터 시작
+      size : 전체 개수
+      odd/even : 홀 짝 확인
+     -->
+        <tr th:each="dto,state : ${list}">
+          <td th:text="${state.index}"></td>
+          <td th:text="${state.count}"></td>
+          <td th:text="${state.size}"></td>
+          <td th:text="${state.odd} + '/' + ${state.even}"></td>
+
+          <td th:text="${dto.id}"></td>
+          <td th:text="${dto.first}"></td>
+          <td th:text="${dto.last}"></td>
+          <td th:text="${#temporals.format(dto.regTime,'yyyy-MM-dd'hh:mm:ss')}"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Sample List5</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>index</th>
+          <th>count</th>
+          <th>size</th>
+          <th>odd/even</th>
+          <th>id</th>
+          <th>first</th>
+          <th>last</th>
+          <th>regtime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 
+      index : 번호 0부터 시작
+      count : 번호 1부터 시작
+      size : 전체 개수
+      odd/even : 홀 짝 확인
+     -->
+        <tr th:each="dto,state : ${list}">
+          <td th:text="${state.index}"></td>
+          <td th:text="${state.count}"></td>
+          <td th:text="${state.size}"></td>
+          <td th:text="${state.odd} + '/' + ${state.even}"></td>
+          <tbody>
+            <td th:text="${dto.id}"></td>
+            <td th:text="${dto.first}"></td>
+            <td th:text="${dto.last}"></td>
+            <td th:text="${#temporals.format(dto.regTime,'yyyy-MM-dd'hh:mm:ss')}"></td>
+          </tbody>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>SampleDto list6</h4>
+
+    <ul>
+      <li th:each="dto : ${list}">
+        <span th:if="${dto.id % 5 ==0}" th:text="${'-----------'+dto.id}"></span>
+        <span th:unless="${dto.id % 5 ==0}" th:text="${dto.first}"></span>
+      </li>
+    </ul>
+
+    <h4>SampleDto list7</h4>
+
+    <ul>
+      <li th:each="dto : ${list}" th:text="${dto.id % 5 ==0} ? ${'----------------'+dto.id}:${dto.first}"></li>
+    </ul>
+
+    <h4>SampleDto list8</h4>
+
+    <ul>
+      <li th:each="dto,state : ${list}" th:switch="${state.even}">
+        <span th:case="true" th:text="${dto.first}"></span>
+        <span th:case="false" th:text="${dto.last}"></span>
+      </li>
+    </ul>
+
+    <h4>thymeleaf 유틸리티 객체</h4>
+    <div th:text="${now}"></div>
+    <div th:text="${#dates.format(now,'yyyy-MM-dd')}"></div>
+
+    <div th:text="${pirce}"></div>
+    <!-- price 를 3자리 마다 "콤마"를 넣어줘라는 의미가 있는 포멧형식 -->
+    <div th:text="${#numbers.formatInteger(price,3,COMMA)}"></div>
+
+    <div th:text="${title}"></div>
+    <!-- th:utext="${#strings.replace(title,'s','<b>s</b>')}"
+    html 태그를 적용 시켜서 지정된 문자인 s 를 볼드화 시킬 수 있다 -->
+    <div th:utext="${#strings.replace(title,'s','<b>s</b>')}"></div>
+    <div th:text="${#strings.startWitdh(title,'This')}"></div>
+
+    <div th:text="${options}"></div>
   </body>
 </html>
