@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.web1.dto.AddDto;
-import com.example.web1.dto.loginDto;
+import com.example.web1.dto.LoginDto;
 
 import lombok.extern.log4j.Log4j2;
 

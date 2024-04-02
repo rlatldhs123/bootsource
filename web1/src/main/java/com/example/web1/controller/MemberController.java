@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.web1.dto.AddDto;
 import com.example.web1.dto.LoginDto;
+import com.example.web1.dto.MemberDto;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Log4j2
@@ -65,6 +67,27 @@ public class MemberController {
         return "/member/login";
 
     }
+
+    // get 방식이 일단 필요함
+    // post 방식도 필요함
+
+    @GetMapping("/join")
+    public void join(MemberDto memberDto) {
+        log.info("/member/join 요청");
+
+    }
+
+    @PostMapping("/join")
+    public String joinPost(@Valid MemberDto memberDto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "/member/join";
+
+        }
+
+        return "redirect:/member/login";
+    }
+
 }
 
 // 데이터 보내기
