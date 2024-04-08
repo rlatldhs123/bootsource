@@ -17,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,10 +33,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = "orderItems")
+@ToString(exclude = { "orderItems", "delivery" })
 @Builder
 
-public class Order {
+public class Order extends BaseEntity {
 
     // 주문번호 pk
     @Id
@@ -60,8 +61,14 @@ public class Order {
     @Builder.Default
     // OneToMany 어노테이션은 무조건 mappedBy 를 줘야한다
     // order item 쪽에서 order 에 접근 할 수 있게 통로를 열어준다
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    // 배송과 1대1 관계
+
+    @OneToOne
+    private Delivery delivery; // 1대1 관계이기에 둘증 어느 엔티티에 가도 상관은 없지만
+    // 우리는 오더 엔티티 클래스의 딜리버리를 들여오기로 했다
 
 }

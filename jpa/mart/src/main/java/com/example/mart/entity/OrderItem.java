@@ -2,6 +2,7 @@ package com.example.mart.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,17 +22,17 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class OrderItem {
+public class OrderItem extends BaseEntity {
     @Column(name = "order_item_id")
     @Id
     @SequenceGenerator(name = "mart_orderitem_seq_gen", sequenceName = "orderitem_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mart_orderitem_seq_gen")
 
     private Long id;
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
 
     private int orderprice;

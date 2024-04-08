@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.mart.entity.Delivery;
+import com.example.mart.entity.DeliveryStauts;
 import com.example.mart.entity.Item;
 import com.example.mart.entity.Member;
 import com.example.mart.entity.Order;
@@ -30,6 +32,9 @@ public class MartRepositoryTest {
     private OrderItemRepository orderItemRepository;
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private DeliveryRepository deliveryRepository;
 
     @Test
     public void insertTest() {
@@ -60,6 +65,7 @@ public class MartRepositoryTest {
                 .name("티셔츠")
                 .price(10000)
                 .stockQuantity(500)
+
                 .build());
 
         itemRepository.save(Item.builder()
@@ -179,7 +185,7 @@ public class MartRepositoryTest {
         // Order 를 기준으로 OrderItem 조회
         // 전체 회원 조회
 
-        Order order = orderRepository.findById(1L).get();
+        Order order = orderRepository.findById(3L).get();
         System.out.println(order);
 
         // Order를 기준으로 OrderItem 을 조회
@@ -187,6 +193,8 @@ public class MartRepositoryTest {
         // 2.FetchType @OneToMany(mappedBy = "order" ,fetch = FetchType.EAGER)변경
 
         System.out.println(order.getOrderItems());
+        // 배송지 조회
+        System.out.println(order.getDelivery().getCity());
 
     }
 
@@ -206,6 +214,47 @@ public class MartRepositoryTest {
         System.out.println(member);
         System.out.println(member.getOrders());
 
+    }
+
+    @Test
+    public void orderInsertDeliveryTest() {
+
+        // 누가 주문하느냐
+
+        Member member = Member.builder().id(1L).build();
+
+        // 어떤 아이템
+        Item item = Item.builder().id(3L).build();
+
+        // 배송지 입력
+        Delivery delivery = Delivery.builder()
+                .city("서울시")
+                .street("123-12")
+                .zipCode("11060")
+                .deliveryStauts(DeliveryStauts.READY)
+                .order(null)
+                .build();
+        deliveryRepository.save(delivery);
+
+        // 주문 + 주문 상품
+        //
+        Order order = Order.builder().id(4L).member(member).orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.ORDER).delivery(delivery).build();
+        orderRepository.save(order);
+
+        OrderItem orderItem = OrderItem.builder().item(item).order(order).orderprice(260000).count(2).build();
+        orderItemRepository.save(orderItem);
+
+    }
+
+    // 배송지를 통해서 관련있는 order 가져 오기
+    @Test
+    public void deliveryOrderGet() {
+        //
+
+        Delivery delivery = deliveryRepository.findById(1L).get();
+        System.out.println(delivery);
+        System.out.println("관련 주문 : " + delivery.getOrder());
     }
 
 }

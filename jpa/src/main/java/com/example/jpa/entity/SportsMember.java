@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@ToString
+@ToString(exclude = "locker")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,7 +22,7 @@ import lombok.ToString;
 @Entity
 @Builder
 
-public class SportsMember {
+public class SportsMember extends BaseEntity {
 
     @SequenceGenerator(name = "sprots_member_seq_gen", sequenceName = "sports_member_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sports_member_seq_gen")
@@ -32,6 +32,8 @@ public class SportsMember {
 
     private String name;
     // 관계를 설정 했다
+
+    //
     @OneToOne
     private Locker locker;
 

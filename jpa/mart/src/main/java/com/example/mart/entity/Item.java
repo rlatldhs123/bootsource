@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class Item {
+@Table(name = "mart_item_tbl")
+public class Item extends BaseEntity {
 
     @Id
     @Column(name = "item_id")
