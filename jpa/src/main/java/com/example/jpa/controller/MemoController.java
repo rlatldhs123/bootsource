@@ -65,7 +65,7 @@ public class MemoController {
         return "redirect:/memo/read";
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteGet(@RequestParam Long mno) {
 
         log.info("메모 삭제 요청{}", mno);
