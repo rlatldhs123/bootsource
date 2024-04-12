@@ -93,4 +93,17 @@ public class MemoRepositoryTest {
 
     }
 
+    @Test
+    public void testJpql() {
+        List<Memo> list = memoRepository.findByMnoLessThan(5L);
+        list.forEach(System.out::println);
+
+        list = memoRepository.findByMnoLessThanOrderByMnoDesc(10L);
+        list.forEach(System.out::println);
+
+        list = memoRepository.findByMnoBetween(50L, 70L);
+        list.forEach(System.out::println);
+
+    }
+
 }

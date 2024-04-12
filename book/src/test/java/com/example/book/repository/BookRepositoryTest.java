@@ -1,5 +1,6 @@
 package com.example.book.repository;
 
+import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.spy;
 
 import java.util.ArrayList;
@@ -11,7 +12,13 @@ import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.ScrollPosition.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.book.entity.Book;
@@ -125,6 +132,21 @@ public class BookRepositoryTest {
         List<String> cateList = list.stream().map(entity -> entity.getName()).collect(Collectors.toList());
         cateList.forEach(System.out::println);
 
+    }
+
+    @Test
+    public void testSearchList() {
+        // page 번호 : 0 부터 시작
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+
+        // Page 객체는 페이지 나누기에 필요한 메소드 제공
+        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate(), pageable);
+
+        System.out.println("getTotalElements (전체 행수)  :  " + result.getTotalElements());
+        System.out.println("getTotalPages (필요한 페이지수) :  " + result.getTotalPages());
+        List<Book> list = result.getContent();
+
+        list.forEach(book -> System.out.println(book));
     }
 
 }

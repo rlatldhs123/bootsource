@@ -1,5 +1,6 @@
 package com.example.mart.repository;
 
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -255,6 +256,26 @@ public class MartRepositoryTest {
         Delivery delivery = deliveryRepository.findById(1L).get();
         System.out.println(delivery);
         System.out.println("관련 주문 : " + delivery.getOrder());
+    }
+
+    @Test
+    @Transactional
+    public void testJoinTest() {
+        List<Object[]> list = orderRepository.joinList();
+
+        for (Object[] objects : list) {
+            Order order = (Order) objects[0];
+            Member member = (Member) objects[1];
+            OrderItem orderItem = (OrderItem) objects[2];
+            System.out.println("------------------------ test 메소드");
+            System.out.println(order);
+            System.out.println(member);
+            System.out.println(orderItem);
+
+        }
+        // Member
+        System.out.println(orderRepository.members());
+
     }
 
 }
