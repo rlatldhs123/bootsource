@@ -78,7 +78,7 @@ public class BookRepositoryTest {
     @Test
     public void testBookCreate() {
 
-        LongStream.rangeClosed(1, 20).forEach(i -> {
+        LongStream.rangeClosed(1, 200).forEach(i -> {
             Book book = Book.builder()
                     .price(25000)
                     .salePrice(22500)
@@ -140,13 +140,12 @@ public class BookRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
 
         // Page 객체는 페이지 나누기에 필요한 메소드 제공
-        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate(), pageable);
+        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate("t", "스프링"), pageable);
 
         System.out.println("getTotalElements (전체 행수)  :  " + result.getTotalElements());
         System.out.println("getTotalPages (필요한 페이지수) :  " + result.getTotalPages());
-        List<Book> list = result.getContent();
+        result.getContent().forEach(book -> System.out.println(book));
 
-        list.forEach(book -> System.out.println(book));
     }
 
 }

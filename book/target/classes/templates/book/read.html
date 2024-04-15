@@ -53,8 +53,14 @@
         </div>
       </div>
       <div>
-        <a class="btn btn-primary" th:href="@{modify(id=${dto.id})}">수정</a>
-        <a class="btn btn-secondary" th:href="@{list}">목록</a>
+        <a
+          class="btn btn-primary"
+          th:href="@{modify(id=${dto.id},page=${pageRequestDto.page},type=${pageRequestDto.type},keyword=${pageRequestDto.keyword})}"
+          >수정</a
+        >
+        <a class="btn btn-secondary" th:href="@{list(page=${pageRequestDto.page},type=${pageRequestDto.type},keyword=${pageRequestDto.keyword})}"
+          >목록</a
+        >
       </div>
     </form>
   </div>
