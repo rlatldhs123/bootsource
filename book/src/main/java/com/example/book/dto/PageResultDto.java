@@ -27,6 +27,7 @@ public class PageResultDto<DTO, EN> {
     private int size;
 
     private int start, end;
+    // 이전/다음 이동 링크 여부
     private boolean prev, next;
     // 페이지 번호 목록
     private List<Integer> pageList;

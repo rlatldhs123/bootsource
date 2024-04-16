@@ -9,4 +9,5 @@ import com.example.guestbook.entity.GuestBook;
 // 동적 쿼리 필요 - 검색
 
 public interface GuestBookRepository extends JpaRepository<GuestBook, Long>, QuerydslPredicateExecutor<GuestBook> {
+
 }

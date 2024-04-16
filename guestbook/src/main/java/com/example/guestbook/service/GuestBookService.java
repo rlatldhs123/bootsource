@@ -3,11 +3,24 @@ package com.example.guestbook.service;
 import java.util.List;
 
 import com.example.guestbook.dto.GuestBookDto;
+import com.example.guestbook.dto.PageRequestDto;
+import com.example.guestbook.dto.PageResultDto;
 import com.example.guestbook.entity.GuestBook;
 
 public interface GuestBookService {
+    // 페이지 나누기전
+    // List<GuestBookDto> getList();
 
-    List<GuestBookDto> getList();
+    // 페이지 나누기후
+    PageResultDto<GuestBookDto, GuestBook> getList(PageRequestDto requestDto);
+
+    GuestBookDto getRow(Long gno);
+
+    GuestBookDto update(GuestBookDto dto);
+
+    void delete(Long gno);
+
+    Long create(GuestBookDto gDto);
 
     public default GuestBookDto entityToDto(GuestBook entity) {
         GuestBookDto gDto = GuestBookDto.builder()
@@ -31,7 +44,6 @@ public interface GuestBookService {
                 .writer(dto.getWriter())
                 .title(dto.getTitle())
                 .content(dto.getContent())
-
                 .build();
 
     }
