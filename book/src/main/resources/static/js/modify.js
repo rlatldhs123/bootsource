@@ -7,3 +7,4 @@ document.querySelector("#delete").addEventListener("click", (e) => {
   form.action = "/book/delete";
   form.submit();
 });
+
