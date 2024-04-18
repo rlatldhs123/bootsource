@@ -43,13 +43,15 @@
 
       <button type="submit" class="btn btn-primary">수정</button>
       <button type="button" class="btn btn-danger" id="delete">삭제</button>
-      <a class="btn btn-secondary" th:href="@{list}">목록</a>
+      <a class="btn btn-secondary" th:href="@{list(page=${pageRequestDto.page},type=${pageRequestDto.type},keyword=${pageRequestDto.keyword})}"
+        >목록</a
+      >
     </form>
     <form action="@{delete}" method="post" id="actionForm">
       <input type="hidden" name="bno" th:value="${dto.bno}" />
-      <!-- <input type="hidden" name="page" th:value="${pageRequestDto.page}" />
+      <input type="hidden" name="page" th:value="${pageRequestDto.page}" />
       <input type="hidden" name="type" th:value="${pageRequestDto.type}" />
-      <input type="hidden" name="keyword" th:value="${pageRequestDto.keyword}" /> -->
+      <input type="hidden" name="keyword" th:value="${pageRequestDto.keyword}" />
     </form>
     <th:block layout:fragment="script">
       <script th:src="@{/js/delete.js}"></script>

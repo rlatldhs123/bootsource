@@ -17,6 +17,7 @@ public class PageRequestDto {
     private int size;
     private int page;
 
+    // 얘내들은 초기화 안하면 null 값이다
     private String type;
     private String keyword;
 
@@ -25,6 +26,7 @@ public class PageRequestDto {
         this.size = 10;
         this.type = "";
         this.keyword = "";
+
     }
     // 스프랑 페이지 나누기 정보 저장 => Pageable
     // 1페이지는 0 부터 시작 그러므로

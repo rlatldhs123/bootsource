@@ -23,6 +23,8 @@ public class PageRequestDto {
     public PageRequestDto() {
         this.page = 1;
         this.size = 10;
+        this.type = "";
+        this.keyword = "";
     }
     // 스프랑 페이지 나누기 정보 저장 => Pageable
     // 1페이지는 0 부터 시작 그러므로

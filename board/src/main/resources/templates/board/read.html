@@ -41,9 +41,11 @@
         />
       </div>
 
-      <a class="btn btn-success" th:href="@{modify(bno=${dto.bno})}">수정</a>
+      <a class="btn btn-success" th:href="@{modify(bno=${dto.bno},type=${pageRequestDto.type},keyword=${pageRequestDto.keyword})}">수정</a>
 
-      <a class="btn btn-secondary" th:href="@{list}">목록</a>
+      <a class="btn btn-secondary" th:href="@{list(page=${pageRequestDto.page},type=${pageRequestDto.type},keyword=${pageRequestDto.keyword})}"
+        >목록</a
+      >
     </form>
   </div>
 </html>
