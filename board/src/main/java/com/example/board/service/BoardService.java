@@ -28,7 +28,7 @@ public interface BoardService {
                 .content(board.getContent())
                 .writerName(board.getWriter().getName())
                 .writerEmail(board.getWriter().getEmail())
-                .replyCount(replyCnt)
+                .replyCount(replyCnt) // 댓글 개수
                 .createdDate(board.getCreatedDate())
                 .lastModifiedDate(board.getLastModifiedDate())
                 .build();

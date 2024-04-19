@@ -17,6 +17,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
+
 @ToString(exclude = "board")
 @Builder
 @NoArgsConstructor
@@ -25,7 +26,7 @@ import lombok.ToString;
 public class Reply extends BaseEntity {
     @Id
     @SequenceGenerator(name = "reply_seq_gen", sequenceName = "reply_seq_gen_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reply_seq_gen_seq_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reply_seq_gen")
     private Long rno;
 
     private String text;
