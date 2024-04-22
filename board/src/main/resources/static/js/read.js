@@ -73,34 +73,62 @@ replyForm.addEventListener("submit", (e) => {
 
   const replyer = replyForm.querySelector("#replyer");
   const text = replyForm.querySelector("#reply");
+  // 수정인 경우에는 값이 들어옴
+
+  const rno = replyForm.querySelector("#rno");
 
   const reply = {
     replyer: replyer.value,
     text: text.value,
     bno: bno,
+    rno: rno.value,
   };
 
-  fetch(`/replies/new`, {
-    method: "post",
-    headers: {
-      // 내가 보내는 데이터를 서버쪽에 알려줘야 함
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(reply), // JSON.stringify() : java 스크립트 객체를  => json  타입으로 변환
-  })
-    .then((resopnse) => resopnse.text())
-    .then((data) => {
-      console.log(data);
-      if (data) {
-        alert(data + "번 댓글 등록");
+  if (!rno.value) {
+    // rno 벨류가 없으면 새글 등록
+    fetch(`/replies/new`, {
+      method: "post",
+      headers: {
+        // 내가 보내는 데이터를 서버쪽에 알려줘야 함
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(reply), // JSON.stringify() : java 스크립트 객체를  => json  타입으로 변환
+    })
+      .then((resopnse) => resopnse.text())
+      .then((data) => {
+        console.log(data);
+        if (data) {
+          alert(data + "번 댓글 등록");
 
-        // 댓글 다달고 나서 폼 인풋부분 초기화
-        replyer.value = "";
-        text.value = "";
+          // 댓글 다달고 나서 폼 인풋부분 초기화
+          replyer.value = "";
+          text.value = "";
 
-        replyLoaded();
-      }
-    });
+          replyLoaded();
+        }
+      });
+  } else {
+    // 있으면 댓글 수정 인 것임
+    fetch(`replies/${rno.value}`, {
+      method: "put",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(reply),
+    })
+      .then((resopnse) => resopnse.text())
+      .then((data) => {
+        if (data) {
+          alert(data, "번 댓글 수정");
+
+          // reply 폼 내용 제거
+
+          reply.value = "";
+          text.value = "";
+          rno.value = "";
+
+          replyLoaded();
+        }
+      });
+  }
 });
 
 // 댓글에서 삭제 버튼을 클릭시
@@ -121,16 +149,39 @@ replyList.addEventListener("click", (e) => {
   const rno = btn.closest(".reply-row").dataset.rno;
   console.log("rno : ", rno);
 
-  fetch(`/replies/${rno}`, {
-    method: "delete",
-  })
-    .then((resopnse) => resopnse.text())
-    .then((data) => {
-      if (data == "success") {
-        alert("댓글 삭제 성공");
-        replyLoaded();
-      }
-    });
+  // 삭제 or 수정 버튼이 클릭이 되었을대만 동작 하기
+
+  // 삭제 or 수정 버튼이 클릭이 되었는지 구분하기
+
+  // 동적 생성 태그이기에 부모요소에 먼저 걸고 나중에 위임하는 형식의 이벤트를 걸어야 함
+
+  if (btn.classList.contains("btn-outline-danger")) {
+    fetch(`/replies/${rno}`, {
+      method: "delete",
+    })
+      .then((resopnse) => resopnse.text())
+      .then((data) => {
+        if (data == "success") {
+          alert("댓글 삭제 성공");
+          replyLoaded();
+        }
+      });
+  } else if (btn.classList.contains("btn-outline-success")) {
+    // rno 에 해당하는 댓글을 가져온후  댓글 작성 폼에 보여주게 하기
+
+    fetch(`/replies/${rno}`)
+      .then((result) => result.json())
+      .then((data) => {
+        // 댓글 잘 도착 함 폼만 찾자 ㅠ
+        console.log("data : ", data);
+
+        const replyForm = document.querySelector("#replyForm");
+
+        replyForm.querySelector("#rno").value = data.rno;
+        replyForm.querySelector("#replyer").value = data.replyer;
+        replyForm.querySelector("#reply").value = data.text;
+      });
+  }
 });
 
 // document.querySelector("#delete").addEventListener("click", () => {

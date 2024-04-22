@@ -17,6 +17,8 @@ public interface ReplyService {
 
     ReplyDto getReply(Long rno);
 
+    Long update(ReplyDto dto);
+
     public default ReplyDto entityToDto(Reply reply) {
         ReplyDto Dto = ReplyDto.builder()
                 .rno(reply.getRno())

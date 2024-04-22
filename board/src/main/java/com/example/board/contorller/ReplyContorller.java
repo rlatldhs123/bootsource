@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -68,6 +69,16 @@ public class ReplyContorller {
 
         log.info("댓글 하나 요청 {}", rno);
         return new ResponseEntity<ReplyDto>(service.getReply(rno), HttpStatus.OK);
+    }
+
+    @PutMapping("/replies/{id}")
+    public ResponseEntity<String> modifyPost(@RequestBody ReplyDto dto, @PathVariable("id") String id) {
+        log.info("업데이트 요청{}, {}", dto, id);
+
+        // 수정이 잘 되면 완료시 리드로 다시 가고 싶음
+        Long rno = service.update(dto);
+
+        return new ResponseEntity<String>(String.valueOf(rno), HttpStatus.OK);
     }
 
 }
