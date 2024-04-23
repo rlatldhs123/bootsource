@@ -67,4 +67,4 @@ public class ClubRepositoryTest {
         System.out.println(clubmember);
     }
 
-}
+} 

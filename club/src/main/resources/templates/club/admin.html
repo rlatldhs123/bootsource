@@ -13,18 +13,19 @@
   </head>
   <body>
     <div class="container">
-      <h1>Home</h1>
+      <h1>admin</h1>
       <div class="my-3">
-        <a href="/">Home</a>
+        <a href="/" class="btn btn-primary">Home</a>
+      </div>
+      <!-- 인증 되었다면 로그아웃을 보여줘 -->
+      <div class="my-3" sec:authorize="isAuthenticated()">
+        <a href="/club/member/logout" class="btn btn-primary">logout</a>
       </div>
       <div class="my-3">
-        <a href="/club/member">Member</a>
+        <a href="/club/member" class="btn btn-primary">Member</a>
       </div>
       <div class="my-3">
-        <a href="/club/manager">Manager</a>
-      </div>
-      <div class="my-3">
-        <a href="/club/admin">ADMIN</a>
+        <a href="/club/manager" class="btn btn-primary">Manager</a>
       </div>
     </div>
   </body>

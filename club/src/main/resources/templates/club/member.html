@@ -13,17 +13,47 @@
   </head>
   <body>
     <div class="container">
-      <h1>Home</h1>
-      <div class="my-3">
-        <a href="/">MEMBER</a>
-      </div>
+      <h1>member</h1>
 
       <div class="my-3">
-        <a href="/club/manager">Manager</a>
+        <a href="/" class="btn btn-primary">home</a>
       </div>
-      <div class="my-3">
-        <a href="/club/admin">ADMIN</a>
+      <!-- 인증 되었다면 로그아웃을 보여줘 -->
+      <div class="my-3" sec:authorize="isAuthenticated()">
+        <a href="/club/member/logout" class="btn btn-primary">logout</a>
       </div>
+
+      <div class="my-3" sec:authorize="hasRole('ROLE_MANAGER')">
+        <a href="/club/manager" class="btn btn-primary">Manager</a>
+      </div>
+      <div class="my-3" sec:authorize="hasRole('ROLE_ADMIN')">
+        <a href="/club/admin" class="btn btn-primary">ADMIN</a>
+      </div>
+
+      <h4>타임리프</h4>
+      <div sec:authentication="name"></div>
+      <div sec:authentication="authorities"></div>
+      <div sec:authentication="principal"></div>
+      <h3>
+        <!-- 타임리프 유틸리티 객체 표현식 
+      #authentication : 현재 사용자의 인증된 정보를 나타내는 객체 . 을 찍어 접근하여 사용자의 정보를 가져 올 수 있음
+    
+    출력 은 user91@soldesk.co.kr
+            user91@soldesk.co.kr
+          이렇게 나온다 밑에 div 태그는 즉 같은 역할을 한다는 것이다
+        -->
+        <!-- <div th:text="${#authentication.name}"></div> -->
+        <h4>기본 방식</h4>
+        권한 확인
+        <span sec:authentication="principal.authorities"></span>
+      </h3>
+      <h3>
+        username(id)
+        <span sec:authentication="principal.username"></span>
+      </h3>
+      <div sec:authorize="isAuthenticated()">이부분은 Authenticated 된 사용자만 보는 부분입니다</div>
+      <div sec:authorize="hasRole('ROLE_ADMIN')">이부분은 Authenticated 되어 권한이 ADMIN 인 사용자만 보는 부분입니다</div>
+      <div sec:authorize="hasRole('ROLE_USER')">이부분은 Authenticated 되어 권한이 일반 USER 인 사용자가 보는 부분입니다</div>
     </div>
   </body>
 </html>
