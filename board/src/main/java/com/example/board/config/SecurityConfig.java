@@ -21,6 +21,10 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/static/**", "/css/*", "/assets/*", "/img/*", "/js/*").permitAll()
+                .requestMatchers("/board/read").permitAll()
+                // get 주소창에서 혹시나 개발자나 잘 아는 사람들의 접근을 막기위해
+                // 회원이 아니면 수정창 접속이 안되게 막아버린다 일단 모디파이 막아봄
+                .requestMatchers("/board/modify").authenticated()
                 .anyRequest().permitAll())
                 .formLogin(login -> login.loginPage("/member/login").permitAll())
                 .logout(logout -> logout

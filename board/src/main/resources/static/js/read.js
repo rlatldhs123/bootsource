@@ -45,12 +45,15 @@ const replyLoaded = () => {
       data.forEach((reply) => {
         result += `<div class="d-flex justify-content-between my-2 border-bottom reply-row" data-rno="${reply.rno}" id="Rerno">`;
         result += `<div class="p-3"><img src="/img/default.png" alt="" class="rounded-circle mx-auto d-block" style="width: 60px; height: 60px" /></div>`;
-        result += `<div class="flex-grow-1 align-self-center"><div>${reply.replyer}</div>`;
+        result += `<div class="flex-grow-1 align-self-center"><div>${reply.writerName}</div>`;
         result += `<div><span class="fs-5">${reply.text}</span></div>`;
         result += `<div class="text-muted"><span class="small">${formatDate(reply.createdDate)}</span></div></div>`;
         result += `<div class="d-flex flex-column align-self-center">`;
-        result += `<div class="mb-2"><button class="btn btn-outline-danger btn-sm">삭제</button></div>`;
-        result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`;
+        // 로그인 유저 == 작성자 (${reply.writerEmail})
+        if (`${email}` == `${reply.writerEmail}`) {
+          result += `<div class="mb-2"><button class="btn btn-outline-danger btn-sm"   >삭제</button></div>`;
+          result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`;
+        }
         result += `</div></div>`;
       });
       // 영역에 result 보여주기
@@ -67,69 +70,73 @@ replyLoaded();
 // 기능 중지 작성자/ 댓글 가져 오기
 
 const replyForm = document.querySelector("#replyForm");
+if (replyForm) {
+  replyForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-replyForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+    const replyer = replyForm.querySelector("#writerEmail");
+    const text = replyForm.querySelector("#reply");
+    // 수정인 경우에는 값이 들어옴
 
-  const replyer = replyForm.querySelector("#replyer");
-  const text = replyForm.querySelector("#reply");
-  // 수정인 경우에는 값이 들어옴
+    const rno = replyForm.querySelector("#rno");
 
-  const rno = replyForm.querySelector("#rno");
+    const reply = {
+      writerEmail: writerEmail.value,
+      text: text.value,
+      bno: bno,
+      rno: rno.value,
+    };
 
-  const reply = {
-    replyer: replyer.value,
-    text: text.value,
-    bno: bno,
-    rno: rno.value,
-  };
+    if (!rno.value) {
+      // rno 벨류가 없으면 새글 등록
+      fetch(`/replies/new`, {
+        method: "post",
+        headers: {
+          // 내가 보내는 데이터를 서버쪽에 알려줘야 함
+          "content-type": "application/json",
+          //  토큰이 필요함
+          "X-CSRF-TOKEN": csrfvalue,
+        },
+        body: JSON.stringify(reply), // JSON.stringify() : java 스크립트 객체를  => json  타입으로 변환
+      })
+        .then((resopnse) => resopnse.text())
+        .then((data) => {
+          console.log(data);
+          if (data) {
+            alert(data + "번 댓글 등록");
 
-  if (!rno.value) {
-    // rno 벨류가 없으면 새글 등록
-    fetch(`/replies/new`, {
-      method: "post",
-      headers: {
-        // 내가 보내는 데이터를 서버쪽에 알려줘야 함
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(reply), // JSON.stringify() : java 스크립트 객체를  => json  타입으로 변환
-    })
-      .then((resopnse) => resopnse.text())
-      .then((data) => {
-        console.log(data);
-        if (data) {
-          alert(data + "번 댓글 등록");
+            // 댓글 다달고 나서 폼 인풋부분 초기화
+            text.value = "";
 
-          // 댓글 다달고 나서 폼 인풋부분 초기화
-          replyer.value = "";
-          text.value = "";
+            replyLoaded();
+          }
+        });
+    } else {
+      // 있으면 댓글 수정 인 것임
+      fetch(`/replies/${rno.value}`, {
+        method: "put",
+        headers: {
+          "content-type": "application/json",
+          "X-CSRF-TOKEN": csrfvalue,
+        },
+        body: JSON.stringify(reply),
+      })
+        .then((resopnse) => resopnse.text())
+        .then((data) => {
+          if (data) {
+            alert(data, "번 댓글 수정");
 
-          replyLoaded();
-        }
-      });
-  } else {
-    // 있으면 댓글 수정 인 것임
-    fetch(`replies/${rno.value}`, {
-      method: "put",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(reply),
-    })
-      .then((resopnse) => resopnse.text())
-      .then((data) => {
-        if (data) {
-          alert(data, "번 댓글 수정");
+            // reply 폼 내용 제거
 
-          // reply 폼 내용 제거
+            text.value = "";
+            rno.value = "";
 
-          reply.value = "";
-          text.value = "";
-          rno.value = "";
-
-          replyLoaded();
-        }
-      });
-  }
-});
+            replyLoaded();
+          }
+        });
+    }
+  });
+}
 
 // 댓글에서 삭제 버튼을 클릭시
 
@@ -158,6 +165,9 @@ replyList.addEventListener("click", (e) => {
   if (btn.classList.contains("btn-outline-danger")) {
     fetch(`/replies/${rno}`, {
       method: "delete",
+      headers: {
+        "X-CSRF-TOKEN": csrfvalue,
+      },
     })
       .then((resopnse) => resopnse.text())
       .then((data) => {
@@ -169,16 +179,17 @@ replyList.addEventListener("click", (e) => {
   } else if (btn.classList.contains("btn-outline-success")) {
     // rno 에 해당하는 댓글을 가져온후  댓글 작성 폼에 보여주게 하기
 
-    fetch(`/replies/${rno}`)
+    fetch(`/replies/${rno}`, {
+      method: "get",
+    })
       .then((result) => result.json())
       .then((data) => {
         // 댓글 잘 도착 함 폼만 찾자 ㅠ
         console.log("data : ", data);
 
-        const replyForm = document.querySelector("#replyForm");
-
         replyForm.querySelector("#rno").value = data.rno;
-        replyForm.querySelector("#replyer").value = data.replyer;
+        replyForm.querySelector("#writerName").value = data.writerName;
+        replyForm.querySelector("#writerEmail").value = data.writerEmail;
         replyForm.querySelector("#reply").value = data.text;
       });
   }

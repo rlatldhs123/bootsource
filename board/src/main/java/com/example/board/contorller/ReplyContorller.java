@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,7 @@ public class ReplyContorller {
 
     // 댓글 추가
     // 주소/replies/new + POST
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/new")
     public ResponseEntity<Long> insertReply(@RequestBody ReplyDto dto) {
 
@@ -54,6 +55,7 @@ public class ReplyContorller {
     }
 
     // /{rno} + DELETE
+
     @DeleteMapping("/{rno}")
     public ResponseEntity<String> deleteReply(@PathVariable("rno") Long rno) {
 
@@ -71,7 +73,8 @@ public class ReplyContorller {
         return new ResponseEntity<ReplyDto>(service.getReply(rno), HttpStatus.OK);
     }
 
-    @PutMapping("/replies/{id}")
+    // @PreAuthorize("authentication.name == #replyDto.writerEmail")
+    @PutMapping("/{id}")
     public ResponseEntity<String> modifyPost(@RequestBody ReplyDto dto, @PathVariable("id") String id) {
         log.info("업데이트 요청{}, {}", dto, id);
 

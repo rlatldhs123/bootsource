@@ -25,15 +25,18 @@ import lombok.ToString;
 
 public class Reply extends BaseEntity {
     @Id
-    @SequenceGenerator(name = "reply_seq_gen", sequenceName = "reply_seq_gen_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reply_seq_gen")
+    @SequenceGenerator(name = "reply1_seq_gen", sequenceName = "reply1_seq_gen_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reply1_seq_gen")
     private Long rno;
 
     private String text;
 
-    private String replyer;
+    // private String replyer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member replyer;
 
     @ManyToOne(fetch = FetchType.LAZY)
+
     private Board board;
 
 }

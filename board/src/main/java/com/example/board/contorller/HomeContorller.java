@@ -1,5 +1,6 @@
 package com.example.board.contorller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +13,7 @@ import com.example.board.dto.PageRequestDto;
 @Controller
 @Log4j2
 public class HomeContorller {
+    @PreAuthorize("permitAll()")
     @GetMapping("/")
     public String home(RedirectAttributes rttr, PageRequestDto requestDto) {
         log.info("홈 요청");
