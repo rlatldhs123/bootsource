@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.board.dto.MemberDto;
 import com.example.board.dto.PageRequestDto;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/member")
 public class MemberController {
 
-    private final MemberDetailService memberDetailService;
+    private final MemberDetailService service;
 
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
@@ -44,7 +45,8 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public String postRegister(@Valid MemberDto memberDto, BindingResult result, PageRequestDto pageRequestDto) {
+    public String postRegister(@Valid MemberDto memberDto, BindingResult result, PageRequestDto pageRequestDto,
+            RedirectAttributes rttr) {
 
         log.info("회원 가입 요청 {}", memberDto);
 
@@ -52,7 +54,15 @@ public class MemberController {
             return "/member/register";
 
         }
-        memberDetailService.register(memberDto);
+        try {
+            service.register(memberDto);
+        } catch (Exception e) {
+
+            e.printStackTrace(); // 이미 가입된 메시지가 dupEmail에 담긴다
+            rttr.addFlashAttribute("dupEmail", e.getMessage());
+            return "redirect:/member/register";
+
+        }
 
         return "redirect:/member/login";
     }

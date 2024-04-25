@@ -52,18 +52,12 @@ public class MemberDetailService implements UserDetailsService, MemberService {
     }
 
     @Override
-    public void register(MemberDto insertDto) {
+    public void register(MemberDto insertDto) throws Exception {
 
         log.info("회원 가입 요청 {}", insertDto);
 
-        try {
-            // 중복 이메일
-            validateDuplicationMember(insertDto.getEmail());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-
-        }
+        // 중복 이메일
+        validateDuplicationMember(insertDto.getEmail());
 
         // 중복 이메일(PK)롣 검사 해야 함
 
@@ -78,9 +72,11 @@ public class MemberDetailService implements UserDetailsService, MemberService {
 
     }
 
-    private void validateDuplicationMember(String email) {
+    // 하단에 throw new Exception("이미 가입된 회원입니다"); 이렇게 쓴다면 throws Exception 이렇게 엑셥션을 던짐
+    private void validateDuplicationMember(String email) throws Exception {
         Optional<Member> member = memberRepositoty.findById(email);
         if (member.isPresent()) {
+            // throw : 강제 익셉션 발생 시키기
             throw new IllegalStateException("이미 가입된 회원입니다");
 
         }
