@@ -1,6 +1,7 @@
 package com.example.movie.repository;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.movie.constant.MemberRole;
 import com.example.movie.entity.Member;
@@ -137,6 +139,33 @@ public class MovieRepositoryTest {
         for (Object[] objects : list) {
             System.out.println(Arrays.toString(objects));
         }
+
+    }
+
+    @Test
+    public void movieGetTest() {
+        List<Object[]> result = movieImageRepository.getMovieRow(3L);
+
+        for (Object[] objects : result) {
+
+            System.out.println(Arrays.toString(objects));
+
+        }
+    }
+
+    @Transactional
+    @Test
+    public void movieRemoveTest() {
+        Movie movie = Movie.builder().mno(2L).build();
+
+        // 이미지 삭제
+        movieImageRepository.deleteMovie(movie);
+
+        // 리뷰 삭제
+        reviewRepository.deleteMovie(movie);
+
+        // 영화삭제
+        movieRepository.delete(movie);
 
     }
 }

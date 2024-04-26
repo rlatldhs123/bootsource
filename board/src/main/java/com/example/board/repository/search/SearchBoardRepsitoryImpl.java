@@ -82,6 +82,7 @@ public class SearchBoardRepsitoryImpl extends QuerydslRepositorySupport implemen
         tuple.where(builder);
 
         // 페이지 나누기 -
+        // sort 지정
         Sort sort = pageable.getSort();
         sort.stream().forEach(order -> {
             Order direction = order.isAscending() ? Order.ASC : Order.DESC;

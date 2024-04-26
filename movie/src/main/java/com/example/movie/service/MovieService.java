@@ -16,6 +16,12 @@ import com.example.movie.entity.MovieImage;
 import com.example.movie.entity.Review;
 
 public interface MovieService {
+    // 리드
+    MovieDto getRow(Long mno);
+
+    // 삭제
+
+    void movieRemove(Long mno);
 
     PageResultDto<MovieDto, Object[]> getList(PageRequestDto pageRequestDto);
 
@@ -25,18 +31,20 @@ public interface MovieService {
     // uuid=6444a6d2-77e1-44d5-b8d9-1959f7e438a6, imgName=img0jpg, path=null), 1,
     // 3.0]
 
-    public default MovieDto entityToDto(List<MovieImage> movieImages, Review review, Movie movie, Long reviewCnt,
+    public default MovieDto entityToDto(Movie movie, List<MovieImage> movieImages, Long reviewCnt,
             Double avg) {
         MovieDto movieDto = MovieDto.builder()
                 .mno(movie.getMno())
                 .createdDate(movie.getCreatedDate())
                 .lastModifiedDate(movie.getLastModifiedDate())
                 .title(movie.getTitle())
-                .avg(avg)
+                .avg(avg != null ? avg : 0.0d)
                 .reviewCnt(reviewCnt)
                 .build();
 
         // 영화 상세 조회 => 이미지를 모두 보여주기
+
+        // 엔티티 => DTO
 
         List<MovieImageDto> movieImageDtos = movieImages.stream().map(movieImage -> {
             return MovieImageDto.builder()
@@ -52,7 +60,7 @@ public interface MovieService {
 
     }
 
-    // dto 를 엔티티로
+    // dto => 엔티티로
 
     public default Map<String, Object> dtoToEntity(MovieDto dto) {
 

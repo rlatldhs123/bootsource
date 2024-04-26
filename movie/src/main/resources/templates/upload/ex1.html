@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!--  파일 업로드시 폼에서 속성을 이렇게 줘야 한다 -->
+    <!-- 그냥 보낸다고 서버에서 받을 수 있는게 아니라 파일 처리 설정이 필요 하다 -->
+
+    <!--  1) 라이브러리 -->
+    <!--  2) 서블릿 -->
+    <!-- 스프링에서는 프로퍼티즈를가서 설정을 변경한다 -->
+
+    <input type="file" name="files" id="" multiple />
+    <button class="uploadBtn">업로드</button>
+    <script>
+      document.querySelector(".uploadBtn").addEventListener("click", () => {
+        // 업로드 버튼 클릭시
+
+        // 파일즈에 있는 파일 목록을 가져와서  폼 형태로 만들기
+
+        const inPutFile = document.querySelector("[name='files']");
+        console.log(inPutFile);
+
+        const files = inPutFile.files;
+        console.log("files");
+        console.log(files);
+
+        // 스크립트에서 폼태그 작성 하는 법
+
+        const formData = new FormData();
+
+        for (let index = 0; index < files.length; index++) {
+          formData.append("uploadFiles", files[index]);
+        }
+
+        // for (const key of formData.keys()) {
+        //   console.log(key);
+        // }
+
+        // for (const value of formData.values()) {
+        //   console.log(value);
+        // }
+
+        fetch("/upload/uploadAjax", {
+          method: "post",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          });
+      });
+    </script>
+  </body>
+</html>
