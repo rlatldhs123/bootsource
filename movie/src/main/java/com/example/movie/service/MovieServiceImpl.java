@@ -3,6 +3,7 @@ package com.example.movie.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.data.domain.Page;
@@ -102,6 +103,28 @@ public class MovieServiceImpl implements MovieService {
 
         // 영화삭제
         movieRepository.delete(movie);
+
+    }
+
+    @Transactional
+    @Override
+    public Long movieInsert(MovieDto movieDto) {
+        // 영화정보 : title => Movie Entity
+        // 이미지 : MovieImage Entity
+
+        Map<String, Object> entityMap = dtoToEntity(movieDto);
+
+        // 무비 삽입
+        Movie movie = (Movie) entityMap.get("movie");
+        movieRepository.save(movie);
+
+        // 무비 이미지 삽입
+        List<MovieImage> movieImages = (List<MovieImage>) entityMap.get("imgList");
+        movieImages.forEach(image -> movieImageRepository.save(image));
+
+        // dto ==> entity
+
+        return movie.getMno();
 
     }
 

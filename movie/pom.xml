@@ -23,6 +23,15 @@
 			<version>5.0.0</version>
 			<classifier>jakarta</classifier>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+		<!-- 자동으로 썸네일 이미지로 나오게 해주는 라이브러리 -->
+<dependency>
+    <groupId>net.coobird</groupId>
+    <artifactId>thumbnailator</artifactId>
+    <version>0.4.20</version>
+</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
 		<dependency>
 			<groupId>com.querydsl</groupId>

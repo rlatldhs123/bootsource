@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <!--  파일 업로드시 폼에서 속성을 이렇게 줘야 한다 -->
@@ -15,7 +23,74 @@
 
     <input type="file" name="files" id="" multiple />
     <button class="uploadBtn">업로드</button>
+
+    <div id="" class="output"></div>
     <script>
+      // x 를 누르면 파일 삭제 요청
+
+      //  a 태그 기능 중지 => href 값 가져와서 화면 출력
+
+      // =================================================================================================================================================================
+
+      // 삽질한번 해봤는데 생각해보면 a 태그는 밑에서 동적으로 만들어 지기에
+
+      // 애초에 직접 이런식으로 걸 수가 없음 ㅋㅋ
+
+      // insertAdjacentHTML 메서드는 DOM 요소 내부에 새 HTML을 삽입하는 메서드입니다. 이 메서드는 지정된 위치에 새 HTML을 추가할 수 있습니다. insertAdjacentHTML 메서드는 다음과 같은 네 가지 위치 옵션을 가지고 있습니다:
+
+      // "beforebegin": 선택한 요소 이전에 HTML을 삽입합니다.
+      // "afterbegin": 선택한 요소의 첫 번째 자식으로 HTML을 삽입합니다.
+      // "beforeend": 선택한 요소의 마지막 자식으로 HTML을 삽입합니다.
+      // "afterend": 선택한 요소 다음에 HTML을 삽입합니다.
+
+      document.querySelector(".output").addEventListener("click", (e) => {
+        e.preventDefault();
+
+        console.log(" x 클릭 ", e.target);
+
+        // 아웃풋에 묶여있는 애들을 다 가지고 옴
+        console.log(" x 클릭  currentTarget ", e.currentTarget);
+
+        const currentDiv = e.target.closest("div");
+
+        // 결국 이러한 방법으로  a 태그를 가져 왔다
+        const filePath = e.target.closest("a").getAttribute("href");
+        console.log(filePath);
+
+        const formData = new FormData();
+        formData.append("filePath", filePath);
+
+        fetch("/upload/remove", {
+          method: "post",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            if (data) {
+              // 넘어온 데이터가 트루라면 화면에서도 제거
+
+              console.log();
+
+              currentDiv.remove();
+            }
+          });
+      });
+
+      function showUploadImages(arr) {
+        console.log("showUploadImages ", arr);
+
+        const output = document.querySelector(".output");
+
+        let tags = "";
+
+        arr.forEach((element) => {
+          tags += `<div>`;
+          tags += `<img src="display?fileName=${element.thumbImageURL}">`;
+          tags += `<a href="${element.imageURL}"><i class="fa-solid fa-trash"></i>`;
+          tags += `</div>`;
+        });
+        output.insertAdjacentHTML("beforeend", tags);
+      }
       document.querySelector(".uploadBtn").addEventListener("click", () => {
         // 업로드 버튼 클릭시
 
@@ -51,6 +126,8 @@
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
+
+            showUploadImages(data);
           });
       });
     </script>

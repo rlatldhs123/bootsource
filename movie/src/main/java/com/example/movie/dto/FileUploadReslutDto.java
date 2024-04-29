@@ -1,39 +1,29 @@
 package com.example.movie.dto;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Builder
 
-public class MovieImageDto {
+// Serializable : 객체 상대로 입출력 하기위해 필요함
+public class FileUploadReslutDto implements Serializable {
 
-    private Long inum;
+    // v폴더, uuid ,실제 파일 명
 
-    //
-
+    private String folderPath;
     private String uuid;
-
-    private String imgName;
-
-    private String path;
+    private String fileName;
 
     public String getImageURL() {
         String fullPath = "";
 
         try {
-            fullPath = URLEncoder.encode(path + "/" + uuid + "_" + imgName, "UTF-8");
+            fullPath = URLEncoder.encode(folderPath + "/" + uuid + "_" + fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
 
             e.printStackTrace();
@@ -46,7 +36,7 @@ public class MovieImageDto {
         String fullPath = "";
 
         try {
-            fullPath = URLEncoder.encode(path + "/small_" + uuid + "_" + imgName, "UTF-8");
+            fullPath = URLEncoder.encode(folderPath + "/small_" + uuid + "_" + fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
 
             e.printStackTrace();
