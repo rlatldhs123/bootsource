@@ -10,9 +10,9 @@ import com.example.movie.repository.total.MovieImageReviewRepository;
 
 public interface MovieImageRepository extends JpaRepository<MovieImage, Long>, MovieImageReviewRepository {
 
-    // delete(), deleteById() ==> MOvieImage 의 inum 기준임
+    // DELETE FROM MOVIE_IMAGE mi WHERE movie_mno=1; ==> 메소드 생성필요
+    // delele(), deleteById() ==> MovieImage 의 inum 기준임
     @Modifying
     @Query("delete from MovieImage mi where mi.movie = :movie")
-    void deleteMovie(Movie movie);
-
+    void deleteByMovie(Movie movie);
 }

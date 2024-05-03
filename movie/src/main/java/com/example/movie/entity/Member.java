@@ -2,6 +2,7 @@ package com.example.movie.entity;
 
 import com.example.movie.constant.MemberRole;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,32 +18,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Getter
-@Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// 테이블 이름 movie_member 로 바꾸기
+@Getter
+@Setter
+@ToString
+@Entity
 @Table(name = "movie_member")
-public class Member {
-
-    // mid 피케이 시퀀스
+public class Member extends BaseEntity {
     @Id
-    @SequenceGenerator(name = "movie_member_seq_gen", sequenceName = "movie_member_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_member_gen")
+    @SequenceGenerator(name = "movie_member_seq_gen", sequenceName = "movie_member_seq", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_member_seq_gen")
     private Long mid;
 
-    // 이메일 패스워드 nickname MemberRole
-
+    @Column(unique = true)
     private String email;
-
     private String password;
-
     private String nickname;
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
-
 }

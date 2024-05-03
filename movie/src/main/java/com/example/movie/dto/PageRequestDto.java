@@ -8,16 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
 @Builder
-
+@AllArgsConstructor
+@Data
 public class PageRequestDto {
-
-    private int size;
     private int page;
+    private int size;
 
-    // 얘내들은 초기화 안하면 null 값이다
+    // 초기화 안하면 null 임
     private String type;
     private String keyword;
 
@@ -26,12 +24,10 @@ public class PageRequestDto {
         this.size = 10;
         this.type = "";
         this.keyword = "";
-
     }
-    // 스프랑 페이지 나누기 정보 저장 => Pageable
-    // 1페이지는 0 부터 시작 그러므로
-    // page 받은거에서 1을 뺀다
 
+    // 스프링 페이지 나누기 정보 저장 => Pageable
+    // 1 page => 0 부터 시작
     public Pageable getPageable(Sort sort) {
         return PageRequest.of(page - 1, size, sort);
     }

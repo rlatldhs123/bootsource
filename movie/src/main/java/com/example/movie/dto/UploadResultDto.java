@@ -7,42 +7,36 @@ import java.net.URLEncoder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+// Serializable : 객체 상태로 입출력
+
 @Data
 @AllArgsConstructor
-
-// Serializable : 객체 상대로 입출력 하기위해 필요함
-public class FileUploadReslutDto implements Serializable {
-
-    // v폴더, uuid ,실제 파일 명
-
+public class UploadResultDto implements Serializable {
+    // 폴더, uuid, 실 파일명
     private String folderPath;
     private String uuid;
     private String fileName;
 
+    // 저장된 파일의 위치
     public String getImageURL() {
         String fullPath = "";
 
         try {
             fullPath = URLEncoder.encode(folderPath + "/" + uuid + "_" + fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-
             e.printStackTrace();
         }
         return fullPath;
-
     }
 
-    public String getthumbImageURL() {
-        String fullPath = "";
+    public String getThumbImageURL() {
+        String thumbFullPath = "";
 
         try {
-            fullPath = URLEncoder.encode(folderPath + "/small_" + uuid + "_" + fileName, "UTF-8");
+            thumbFullPath = URLEncoder.encode(folderPath + "/s_" + uuid + "_" + fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-
             e.printStackTrace();
         }
-        return fullPath;
-
+        return thumbFullPath;
     }
-
 }

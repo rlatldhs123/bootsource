@@ -5,7 +5,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
@@ -15,22 +14,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Getter
-@Setter
 @ToString(exclude = "movie")
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Entity
 public class MovieImage {
-    // inum pk
-    @Id
-    @SequenceGenerator(name = "inum_seq_gen", sequenceName = "inum_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inum_seq_gen")
-    private Long inum;
 
-    //
+    @SequenceGenerator(name = "movie_image_seq_gen", sequenceName = "movie_image_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_image_seq_gen")
+    @Id
+    private Long inum;
 
     private String uuid;
 
@@ -40,5 +36,4 @@ public class MovieImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Movie movie;
-
 }
