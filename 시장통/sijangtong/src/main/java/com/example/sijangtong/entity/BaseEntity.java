@@ -1,4 +1,4 @@
-package com.example.movie.entity;
+package com.example.sijangtong.entity;
 
 import java.time.LocalDateTime;
 

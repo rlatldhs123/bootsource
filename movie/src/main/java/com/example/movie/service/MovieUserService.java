@@ -29,12 +29,15 @@ public interface MovieUserService {
     }
 
     // entity => dto
+
+    // auth의 값을 담는 과정중 하나도 mid 담아야 리뷰든 뭐든 한다
     public default MemberDto entityToDto(Member entity) {
         return MemberDto.builder()
                 .email(entity.getEmail())
                 .nickname(entity.getNickname())
                 .password(entity.getPassword())
                 .role(entity.getRole())
+                .mid(entity.getMid())
                 .build();
     }
 }
